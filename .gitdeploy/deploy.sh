@@ -60,6 +60,7 @@ function deploy() {
             echo 'GODADDY_API_KEY=${GODADDY_API_KEY:-}' >> ~/.env
             echo 'GODADDY_API_TOKEN=${GODADDY_API_TOKEN:-}' >> ~/.env
             echo 'PORT=5227' >> ~/.env
+            echo 'API_TOKEN=${API_TOKEN:-}' >> ~/.env
             pushd ~/srv/'${GIT_REPO_NAME}'/
             bash scripts/deploy.sh '${my_env}' '${my_domain}' '${my_zone}' '${GIT_REPO_NAME}'
             popd
@@ -83,6 +84,7 @@ elif [[ "dev" == "${GIT_REF_NAME}" ]]; then
 
     echo "Deploying development..."
     source_all 'development'
+    export CLOUDFLARE_API_TOKEN=""
     export GODADDY_API_KEY
     export GODADDY_API_SECRET
     source scripts/builder/00-godaddy-api.sh
