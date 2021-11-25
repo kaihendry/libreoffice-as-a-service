@@ -48,7 +48,9 @@ export PORT
 bash scripts/01-libreoffice.sh
 bash scripts/01-caddy.sh
 bash scripts/02-enable-site.sh "${my_domain}.${my_zone}" "${PORT}" "$(pwd)/public/"
-bash scripts/builder/01-build.sh
+if [[ ! -e node_modules ]]; then
+    bash scripts/builder/01-build.sh
+fi
 bash scripts/03-app.sh "${my_domain}.${my_zone}" "${PORT}" "${my_project_name}"
 
 pushd ~/srv/caddy
