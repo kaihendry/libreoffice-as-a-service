@@ -48,9 +48,12 @@ open http://127.0.0.1:5227/
 
 ```bash
 BASE_URL="http://127.0.0.1:5227"
+source .env
+#API_TOKEN="$(openssl rand -hex 8)"
 
 curl -fS "${BASE_URL}"'/api/convert/pdf?filename=Writing1.docx' \
     -H 'Content-Type: application/octet-stream' \
+    -H "Authorization: Bearer ${API_TOKEN}"
     --data-binary @'fixtures/Writing1.docx' \
     -o Writing1.pdf
 ```
