@@ -14,10 +14,10 @@ if [[ -z ${my_env} ]] ||
     [[ -z ${my_project_name} ]]; then
     echo ''
     echo 'Usage:'
-    echo '    bash scripts/deploy.sh <env> <domain> <zone> <project-name>'
+    echo '    bash scripts/install.sh <env> <domain> <zone> <project-name>'
     echo ''
     echo 'Example:'
-    echo "    bash scripts/deploy.sh 'dev' 'dev-123' 'example.com' 'foobar'"
+    echo "    bash scripts/install.sh 'dev' 'dev-123' 'example.com' 'foobar'"
     echo ''
     exit 1
 fi

@@ -4,11 +4,33 @@ set -e
 set -u
 
 GIT_REPO_NAME="${GIT_REPO_NAME:-"${1}"}"
-GIT_REF_NAME="${GIT_REPO_NAME:-"${2}"}"
+GIT_REF_NAME="${GIT_REF_NAME:-"${2}"}"
 my_env="${2:-development}"
 DNS_SUBDOMAIN="${DNS_SUBDOMAIN:-"${4}"}"
 DNS_ZONE="${DNS_ZONE:-"${4}"}"
 API_TOKEN="${API_TOKEN:-"$(openssl rand -hex 10)"}"
+
+if [[ -z ${GIT_REPO_NAME} ]] ||
+    [[ -z ${GIT_REF_NAME} ]] ||
+    [[ -z ${DNS_SUBDOMAIN} ]] ||
+    [[ -z ${DNS_ZONE} ]] ||
+    [[ -z ${API_TOKEN} ]]; then
+    echo ''
+    echo 'Usage (with ENVs):'
+    echo ''
+    echo '    export GIT_REPO_NAME=foobar'
+    echo '    export GIT_REF_NAME=development'
+    echo '    export DNS_SUBDOMAIN=foobar'
+    echo '    export DNS_ZONE=example.com'
+    echo '    export API_TOKEN="$(openssl rand -hex 10)"'
+    echo '    bash scripts/provision.sh <env> <domain> <zone> <project-name>'
+    echo ''
+    echo 'Usage (with arguments):'
+    echo '    bash scripts/provision.sh <project-name> <branch> <domain> <zone>'
+    echo "    bash scripts/provision.sh 'foobar' 'dev' 'dev-123' 'example.com'"
+    echo ''
+    exit 1
+fi
 
 function check_builder_deps() {
     if [[ -z "$(command -v webi)" ]]; then
@@ -60,7 +82,7 @@ function deploy() {
             pushd ~/srv/'${GIT_REPO_NAME}'/
             echo 'PORT=5227' >> ./.env
             echo 'API_TOKEN=${API_TOKEN:-}' >> ./.env
-            bash scripts/deploy.sh '${my_env}' '${my_domain}' '${my_zone}' '${GIT_REPO_NAME}'
+            bash scripts/install.sh '${my_env}' '${my_domain}' '${my_zone}' '${GIT_REPO_NAME}'
             popd
         "
 }
