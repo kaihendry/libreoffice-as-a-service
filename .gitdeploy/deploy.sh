@@ -56,12 +56,12 @@ function deploy() {
         "${my_hostname}" "
             source ~/.config/envman/load.sh
             rm -f ~/.env
-            echo 'CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-}' >> ~/.env
-            echo 'GODADDY_API_KEY=${GODADDY_API_KEY:-}' >> ~/.env
-            echo 'GODADDY_API_TOKEN=${GODADDY_API_TOKEN:-}' >> ~/.env
-            echo 'PORT=5227' >> ~/.env
-            echo 'API_TOKEN=${API_TOKEN:-}' >> ~/.env
+            echo 'CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-}' >> ./.env
+            echo 'GODADDY_API_KEY=${GODADDY_API_KEY:-}' >> ./.env
+            echo 'GODADDY_API_TOKEN=${GODADDY_API_TOKEN:-}' >> ./.env
             pushd ~/srv/'${GIT_REPO_NAME}'/
+            echo 'PORT=5227' >> ./.env
+            echo 'API_TOKEN=${API_TOKEN:-}' >> ./.env
             bash scripts/deploy.sh '${my_env}' '${my_domain}' '${my_zone}' '${GIT_REPO_NAME}'
             popd
         "
