@@ -77,7 +77,7 @@ if [[ "production" == "${GIT_REF_NAME}" ]]; then
     source_all 'production'
     export CLOUDFLARE_API_TOKEN
     source scripts/builder/00-cloudflare-api.sh
-    deploy production "${DNS_SUBDOMIN}" "${DNS_ZONE}"
+    deploy production "${DNS_SUBDOMAIN}" "${DNS_ZONE}"
 
 elif [[ "dev" == "${GIT_REF_NAME}" ]]; then
 
@@ -86,7 +86,7 @@ elif [[ "dev" == "${GIT_REF_NAME}" ]]; then
     export GODADDY_API_KEY
     export GODADDY_API_SECRET
     source scripts/builder/00-godaddy-api.sh
-    deploy dev "${DNS_SUBDOMIN}" "${DNS_ZONE}"
+    deploy dev "${DNS_SUBDOMAIN}" "${DNS_ZONE}"
 
 else
     source scripts/builder/00-godaddy-api.sh
