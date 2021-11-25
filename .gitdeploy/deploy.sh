@@ -5,6 +5,7 @@ set -u
 
 GIT_REF_NAME="${GIT_REF_NAME:-}"
 GIT_REPO_ID="${GIT_REPO_ID:-EMPTY_REPO_ID}"
+GIT_REPO_NAME="${GIT_REPO_NAME:-EMPTY_REPO_NAME}"
 
 # See the Git Credentials Cheat Sheet
 # https://coolaj86.com/articles/vanilla-devops-git-credentials-cheatsheet/
@@ -38,7 +39,7 @@ function deploy() {
     local my_domain="${2}"
     local my_zone="${3}"
 
-    bash ./scripts/builder/00-provision-vps.sh \
+    bash ./scripts/builder/01-provision-vps.sh \
         "${my_domain}" "${my_zone}"
 
     local my_hostname="app@${my_domain}.${my_zone}"
@@ -47,7 +48,8 @@ function deploy() {
         "${my_hostname}" 'mkdir -p ~/srv/'
 
     #shellcheck disable=SC2153
-    rsync -av --delete --inplace --exclude=.git \
+    rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
+        -av --delete --inplace --exclude=.git \
         ./ "${my_hostname}":~/srv/"${GIT_REPO_NAME}"/
 
     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
@@ -71,6 +73,7 @@ export DIGITALOCEAN_TOKEN
 
 if [[ "production" == "${GIT_REF_NAME}" ]]; then
 
+    echo "Deploying production..."
     source_all 'production'
     export CLOUDFLARE_API_TOKEN
     source scripts/builder/00-cloudflare-api.sh
@@ -78,6 +81,7 @@ if [[ "production" == "${GIT_REF_NAME}" ]]; then
 
 elif [[ "dev" == "${GIT_REF_NAME}" ]]; then
 
+    echo "Deploying development..."
     source_all 'development'
     export GODADDY_API_KEY
     export GODADDY_API_SECRET
