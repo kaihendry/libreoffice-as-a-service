@@ -34,6 +34,7 @@ fi
 
 if [[ -z "$(command -v fish)" ]]; then
     webi rg iterm2-utils
+    export DEBIAN_FRONTEND=noninteractive
     sudo apt install -y fish || curl https://webinstall.dev/fish | bash
 fi
 
