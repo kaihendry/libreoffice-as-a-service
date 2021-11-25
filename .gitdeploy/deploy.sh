@@ -14,8 +14,8 @@ GIT_REPO_ID="${GIT_REPO_ID:-EMPTY_REPO_ID}"
 function check_builder_deps() {
     if [[ -z "$(command -v webi)" ]]; then
         curl https://webinstall.dev | bash
-        export PATH="$HOME/.local/bin:${PATH}"
     fi
+    export PATH="$HOME/.local/bin:${PATH}"
 }
 
 function build() {
@@ -26,7 +26,8 @@ function source_all() {
     my_env="${1}"
 
     source ".env.${my_env}" 2> /dev/null || true
-    source ~/envs/"${my_env}".env 2> /dev/null || true
+    #shellcheck disable=SC2153
+    source ~/envs/"${my_env}"/"${GIT_REPO_NAME}"/env 2> /dev/null || true
     source .env 2> /dev/null || true
     source ../.env 2> /dev/null || true
     source ~/.env 2> /dev/null || true
